@@ -1,7 +1,11 @@
 from datetime import datetime
 import requests
+import os
+from dotenv import load_dotenv
 
-key = "AIzaSyCsS71-7knB_kSOOMuIppGS5cw5ISUKsvo"
+load_dotenv
+
+key = os.getenv("GOOGLE_BOOKS_KEY")
 url = "https://www.googleapis.com/books/v1/volumes"
 
 def get_book_data(isbn: str):
