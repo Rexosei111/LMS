@@ -9,7 +9,7 @@ class IssuedDetailForm(forms.ModelForm):
         # exclude = ["issued_by"]
 
 
-class BookFOrm(forms.ModelForm):
+class BookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = "__all__"
