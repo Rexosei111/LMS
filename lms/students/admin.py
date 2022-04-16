@@ -8,12 +8,14 @@ from .models import Programme, Student
 
 class CustomStudentAdmin(admin.ModelAdmin):
     list_display = ["index_number", "email", "level", "programme"]
-    search_fields = ["first_name", "last_name", "programme", "index_number", "email"]
+    search_fields = ["index_number", "first_name", "last_name", "programme", "email"]
     list_filter = ["programme", "level"]
+    autocomplete_fields = ["programme"]
 
 
 class CustomProgrammeAdmin(admin.ModelAdmin):
     list_display = ["name", "number_of_students"]
+    search_fields = ["name"]
 
 
 admin_site.register(Student, CustomStudentAdmin)

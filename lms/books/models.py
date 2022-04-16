@@ -1,7 +1,8 @@
-from datetime import timezone
+from datetime import datetime
 from django.db import models
 from django.conf import settings
-
+from django.core.exceptions import ValidationError
+from .myrequests import get_book_data, get_date
 from students.models import Student
 
 # Create your models here.
@@ -33,11 +34,12 @@ class Language(models.Model):
 
 
 class Book(models.Model):
+    fetch_data = models.BooleanField(default=True)
     isbn = models.CharField(
-        max_length=15,
+        max_length=20,
         help_text="13 Character ISBN number (https://www.isbn-international.org/content/what-isbn)",
     )
-    author = models.CharField(max_length=100)
+    author = models.CharField(max_length=100, null=True, blank=True)
     title = models.CharField(max_length=200)
     summary = models.CharField(
         max_length=500, help_text="Enter brief description of the book"
@@ -45,8 +47,14 @@ class Book(models.Model):
     language = models.ForeignKey(
         Language, on_delete=models.SET_NULL, null=True, blank=True
     )
-    genre = models.ManyToManyField(Genre)
-    available_copies = models.IntegerField()
+    genre = models.ManyToManyField(Genre, blank=True)
+    publisher = models.CharField(max_length=100, null=True, blank=True)
+    published_date = models.DateField(null=True, blank=True)
+    page_count = models.PositiveIntegerField(null=True, blank=True)
+    available_copies = models.PositiveIntegerField(null=True, blank=True)
+    image_link = models.URLField(null=True, blank=True)
+    image_small_thumbnail = models.URLField(null=True, blank=True)
+    shelf_number = models.PositiveIntegerField(null=True, blank=True)
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -55,6 +63,32 @@ class Book(models.Model):
         limit_choices_to={"is_staff": True},
     )
 
+    def clean(self) -> None:
+        number = "".join(self.isbn.split("-"))
+        if(self.fetch_data):
+            if len(number) in [10, 13]:
+                data = get_book_data(self.isbn)
+                pub_date = get_date(data["publishedDate"])
+                if(data):
+                    author = data.get("authors", None)
+                    self.author = author[0] if author else None
+                    self.title = data["title"] or self.title
+                    self.publisher = data["publisher"] or None
+                    self.published_date =  pub_date
+                    self.page_count = data.get("pageCount", None)
+                    self.summary = data["description"] or None
+                    self.image_link = data["imageLinks"]["thumbnail"] or None
+                    self.image_small_thumbnail = data["imageLinks"]["smallThumbnail"] or None
+                    
+                else:
+                    raise ValidationError("Unable to retrieve book data")
+            else:
+                raise ValidationError(
+                {
+                    "isbn": "Invalid Isbn"
+                }
+            )
+        return super().clean()
     def __str__(self):
         return self.title
 
