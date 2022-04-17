@@ -4,6 +4,7 @@ import { Box, Button, styled, Typography, useMediaQuery } from "@mui/material";
 import SearchField from "../components/searchField";
 import TopNav from "../components/TopNav";
 import heroImg from "../images/hero1.svg";
+import { Link } from "react-router-dom";
 
 export const CTAButton = styled(Button)(({ theme }) => ({
   color: "white",
@@ -30,7 +31,6 @@ function HeroSection() {
         justifyContent: "center",
       }}
     >
-      <TopNav />
       <Box display={"flex"} alignItems="center">
         <Box
           p={2}
@@ -64,7 +64,9 @@ function HeroSection() {
             Filter your search by Author, title, subjects, etc.
           </Typography>
           <SearchField />
-          <CTAButton sx={{ mt: 2 }}>View Books</CTAButton>
+          <CTAButton sx={{ mt: 2 }} component={Link} to="books">
+            View Books
+          </CTAButton>
         </Box>
         {large && (
           <img

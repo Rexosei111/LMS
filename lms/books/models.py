@@ -94,8 +94,8 @@ class Book(models.Model):
 
 
 class IssuedDetail(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.DO_NOTHING)
-    student = models.ForeignKey(Student, on_delete=models.DO_NOTHING)
+    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     issued_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,

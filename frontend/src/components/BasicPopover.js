@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Container, IconButton, List, ListItemButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Link } from "react-router-dom";
 
 export default function BasicPopover() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,9 +36,13 @@ export default function BasicPopover() {
         }}
       >
         <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-          <ListItemButton>Home</ListItemButton>
+          <ListItemButton component={Link} to="/">
+            Home
+          </ListItemButton>
           <ListItemButton>Register</ListItemButton>
-          <ListItemButton>Search</ListItemButton>
+          <ListItemButton component={Link} to="/books">
+            Search
+          </ListItemButton>
         </List>
       </Popover>
     </div>
