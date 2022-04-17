@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import logo from "../images/logo.png";
 import { Divider, useMediaQuery } from "@mui/material";
 import BasicPopover from "./BasicPopover";
+import { Link } from "react-router-dom";
 
 function LogoText() {
   return (
@@ -78,28 +79,36 @@ export default function TopNav() {
                     bgcolor: "#6f6efc",
                   },
                 }}
+                component={Link}
+                to="/"
               >
                 Home
               </Button>
               <Button
                 sx={{
                   color: "#6f6efc",
+                  borderColor: "#6f6efc",
                   "&:hover": {
                     bgcolor: "#6f6efc",
                     color: "white",
                   },
                 }}
+                variant="outlined"
               >
                 Register
               </Button>
               <Button
+                variant="outlined"
                 sx={{
                   color: "#6f6efc",
+                  borderColor: "#6f6efc",
                   "&:hover": {
                     bgcolor: "#6f6efc",
                     color: "white",
                   },
                 }}
+                component={Link}
+                to="/books"
               >
                 search
               </Button>

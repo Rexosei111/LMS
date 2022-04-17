@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = [
     path("books", views.BookList.as_view(), name="Book List view"),
+    path("books/recent", views.RecentBooks.as_view()),
     path("books/<str:isbn>", views.GetBook.as_view())
 ]
 

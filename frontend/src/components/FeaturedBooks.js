@@ -17,7 +17,9 @@ function FeaturedBooks() {
   const recent = useRef();
   useEffect(() => {
     async function getBooks() {
-      const { data } = await axios.get("http://localhost:8000/api/books");
+      const { data } = await axios.get(
+        "http://localhost:8000/api/books/recent"
+      );
       setBooks(data.results);
     }
     getBooks();

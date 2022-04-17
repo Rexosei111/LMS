@@ -14,6 +14,10 @@ class BookList(generics.ListAPIView):
         user = self.request.user
         queryset = Book.objects.all()
         return queryset
+    
+class RecentBooks(generics.ListAPIView):
+    queryset = Book.objects.all()[:8]
+    serializer_class = BookSerializer
 
 class GetBook(generics.RetrieveAPIView):
     serializer_class = BookDetailSerializer
