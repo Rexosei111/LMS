@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from .admin import admin_site
 from books import urls as books_url
+from students import urls as student_url
 
 urlpatterns = [
     path('admin/', admin_site.urls),
-    path('api/', include(books_url)),
+    path('api/books/', include(books_url)),
+    path("api/students/", include(student_url)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

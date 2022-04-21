@@ -2,17 +2,19 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import { CardActionArea, useMediaQuery } from "@mui/material";
 
 export const truncateBookTitle = (text) => {
-  if (text && text.length > 25) {
-    return text.slice(0, 25) + " ...";
+  if (text && text.length > 250) {
+    return text.slice(0, 250) + " ...";
   }
 
   return text;
 };
 
 function BookCard({ book }) {
+  const large = useMediaQuery("(min-width:1200px)");
+
   return (
     <Card
       sx={{ width: 260, maxHeight: 350, flexShrink: 0 }}

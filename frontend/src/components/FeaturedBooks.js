@@ -35,11 +35,13 @@ function FeaturedBooks() {
 
   return (
     <Container
-      maxWidth={"lg"}
+      maxWidth={"xl"}
       sx={{
-        height: 360,
+        // height: 360,
         position: "relative",
+        bgcolor: "#faf9f8",
         mt: 8,
+        py: 2,
       }}
     >
       <Typography

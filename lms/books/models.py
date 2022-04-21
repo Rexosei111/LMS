@@ -2,6 +2,7 @@ from datetime import datetime
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from pytz import timezone
 from .myrequests import get_book_data, get_date
 from students.models import Student
 
@@ -55,6 +56,7 @@ class Book(models.Model):
     image_link = models.URLField(null=True, blank=True)
     image_small_thumbnail = models.URLField(null=True, blank=True)
     shelf_number = models.PositiveIntegerField(null=True, blank=True)
+    date_added = models.DateField(auto_now_add=True, null=True)
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,

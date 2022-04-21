@@ -65,7 +65,7 @@ function HeroSection() {
           </Typography>
           <SearchField />
           <CTAButton sx={{ mt: 2 }} component={Link} to="books">
-            View Books
+            advance search
           </CTAButton>
         </Box>
         {large && (

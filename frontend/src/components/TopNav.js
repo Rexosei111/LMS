@@ -94,6 +94,7 @@ export default function TopNav() {
                   },
                 }}
                 variant="outlined"
+                href="#registration"
               >
                 Register
               </Button>
@@ -110,7 +111,7 @@ export default function TopNav() {
                 component={Link}
                 to="/books"
               >
-                search
+                Books
               </Button>
             </Box>
           )}

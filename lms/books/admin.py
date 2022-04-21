@@ -9,7 +9,7 @@ from .models import Book, Genre, IssuedDetail, Language
 
 class BookAdmin(admin.ModelAdmin):
     form = BookForm
-    list_display = ["title", "author", "available_copies"]
+    list_display = ["title", "author", "available_copies", "date_added"]
     filter_horizontal = ["genre"]
     autocomplete_fields = ["language"]
     readonly_fields = ["added_by"]

@@ -8,7 +8,7 @@ class BookSerializer(serializers.ModelSerializer):
         
 class BookDetailSerializer(serializers.ModelSerializer):
     language = serializers.StringRelatedField()
-    genre = serializers.StringRelatedField()
+    # genre = serializers.StringRelatedField()
     class Meta:
         model = Book
-        exclude = ["added_by", "fetch_data"]
+        exclude = ["added_by", "fetch_data", "date_added"]

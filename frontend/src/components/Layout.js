@@ -6,7 +6,13 @@ import TopNav from "./TopNav";
 
 function Layout() {
   return (
-    <Box sx={{ overflowX: "hidden" }}>
+    <Box
+      sx={{
+        overflowX: "hidden",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <TopNav />
       <Outlet />
       <Footer />
