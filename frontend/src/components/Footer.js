@@ -10,8 +10,8 @@ function Footer() {
         height: 40,
         bgcolor: "#2f2e41",
         color: "white",
-        // position: "fixed",
-        // bottom: 0,
+        position: "fixed",
+        bottom: 0,
       }}
     >
       <Typography variant="body1" textAlign={"center"}>

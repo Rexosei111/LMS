@@ -4,15 +4,17 @@ from .serializer import BookDetailSerializer, BookSerializer, Book
 from rest_framework.decorators import api_view
 
 class BookList(generics.ListAPIView):
-    queryset = Book.objects.all().order_by("-date_added")
+    # queryset = Book.objects.all().order_by("-date_added")
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["title", "author", "isbn"]
 
     def get_queryset(self):
         # queryset = super(ContactListView, self).get_queryset()
-        user = self.request.user
-        queryset = Book.objects.all()
+        
+        # user = self.request.user
+        # print(self.request.GET[""])
+        queryset = Book.objects.all().order_by("-date_added")
         return queryset
     
 class RecentBooks(generics.ListAPIView):

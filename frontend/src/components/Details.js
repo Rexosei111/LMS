@@ -33,10 +33,10 @@ function Details({ currentBook }) {
         elevation={0}
         variant="outlined"
         sx={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: 400,
+          // position: "absolute",
+          // top: 0,
+          // right: 0,
+          // width: 400,
           py: 2,
           px: 1,
         }}

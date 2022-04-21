@@ -2,7 +2,6 @@ import React from "react";
 import Container from "@mui/material/Container";
 import { Box, Button, styled, Typography, useMediaQuery } from "@mui/material";
 import SearchField from "../components/searchField";
-import TopNav from "../components/TopNav";
 import heroImg from "../images/hero1.svg";
 import { Link } from "react-router-dom";
 
@@ -65,7 +64,7 @@ function HeroSection() {
           </Typography>
           <SearchField />
           <CTAButton sx={{ mt: 2 }} component={Link} to="books">
-            advance search
+            search
           </CTAButton>
         </Box>
         {large && (

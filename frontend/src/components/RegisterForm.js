@@ -101,6 +101,7 @@ function RegisterForm() {
         gap: 4,
         width: "100%",
         py: 2,
+        mb: 4,
       }}
     >
       <Box sx={{ width: small ? "100%" : "50%" }}>

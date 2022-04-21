@@ -9,8 +9,10 @@ function Layout() {
     <Box
       sx={{
         overflowX: "hidden",
-        display: "flex",
-        flexDirection: "column",
+        // height: "100vh",
+        // display: "flex",
+        // flexDirection: "column",
+        // alignItems: "space-between",
       }}
     >
       <TopNav />

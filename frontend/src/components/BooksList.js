@@ -42,7 +42,7 @@ function BooksList() {
           Book Not Found
         </Typography>
       ) : (
-        <Box position={"relative"}>
+        <Box position>
           <Grid container>
             <Grid container item xs={12} lg={8} xl={7} rowSpacing={2}>
               {Books.map((book) => (
@@ -51,8 +51,10 @@ function BooksList() {
                 </Grid>
               ))}
             </Grid>
+            <Grid item lg={4} xl={5}>
+              {large && <Details currentBook={CurrentBook} />}
+            </Grid>
           </Grid>
-          {large && <Details currentBook={CurrentBook} />}
         </Box>
       )}
       <Box
