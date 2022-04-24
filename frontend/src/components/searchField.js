@@ -5,7 +5,7 @@ import { IconButton, InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 
-export default function SearchField() {
+export default function SearchField({ filter, date }) {
   const navigate = useNavigate();
   const [query, setQuery] = React.useState("");
 
@@ -17,7 +17,11 @@ export default function SearchField() {
   const handleEnterSearch = (event) => {
     if (query.length === 0) return false;
     if (event.key === "Enter") {
-      navigate(`/books?search=${query}`);
+      navigate(
+        `/books?search=${query}${filter ? `&filter=${filter}` : ""}${
+          date ? `&pub_date=${date}` : ""
+        }`
+      );
     }
   };
 
