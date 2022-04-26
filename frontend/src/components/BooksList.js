@@ -1,5 +1,5 @@
 import { Container, Grid, Typography, useMediaQuery } from "@mui/material";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import BookCard from "./BookCard";
 import Paginator from "./Paginator";
@@ -42,7 +42,7 @@ function BooksList() {
           Book Not Found
         </Typography>
       ) : (
-        <Box position>
+        <Box>
           <Grid container>
             <Grid container item xs={12} lg={8} xl={7} rowSpacing={2}>
               {Books.map((book) => (
