@@ -33,18 +33,22 @@ function BookDetailPage() {
       });
   }, [params.bookId]);
 
+  const { id, image_link, image_small_thumbnail, title, summary, ...details } =
+    book;
+
   return (
     <Container
       id="viewerCanvas"
       ref={previewContainer}
-      sx={{ bgcolor: "#faf9f8", py: 2, mb: 3 }}
+      sx={{ bgcolor: "#faf9f8", my: 2 }}
+      disableGutters={true}
     >
       {/* {window.GBS_insertEmbeddedViewer(`ISBN:0738531367`, 600, 500)} */}
       <Box>
         <Grid container columnSpacing={3} rowSpacing={3}>
           <Grid item xs={12} sm={5} md={4} lg={3} xl={2}>
             <img
-              src={book.image_link}
+              src={image_link}
               alt=""
               width={"100%"}
               height={300}
@@ -60,9 +64,9 @@ function BookDetailPage() {
               Description
             </Typography>
             <Typography varinat="body1" color="GrayText" mb={2}>
-              {book.summary}
+              {summary}
             </Typography>
-            <BookInfoList />
+            <BookInfoList info={details} />
           </Grid>
         </Grid>
       </Box>
