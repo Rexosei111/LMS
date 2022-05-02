@@ -39,7 +39,7 @@ export default function BasicPopover() {
           </ListItemButton>
           <ListItemButton>Register</ListItemButton>
           <ListItemButton component={Link} to="/books">
-            Search
+            Books
           </ListItemButton>
         </List>
       </Popover>

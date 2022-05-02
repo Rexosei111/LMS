@@ -16,8 +16,8 @@ const filterOptions = [
     label: "Title",
   },
   {
-    value: "genre",
-    label: "Genre",
+    value: "category",
+    label: "category",
   },
   {
     value: "isbn",

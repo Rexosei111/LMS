@@ -1,21 +1,24 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Container, Divider, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Paper,
+  Typography,
+} from "@mui/material";
 import BookInfoList from "../components/BookInfoList";
+import Rating from "@mui/material/Rating";
+import Tooltip from "@mui/material/Tooltip";
 
 function BookDetailPage() {
   const params = useParams();
-  const [book, setBook] = useState({});
+  const [book, setBook] = useState(null);
+  const [embbed, setEmbbed] = useState(false);
   const previewContainer = useRef();
-
-  // const previewBook = (isbn) => {
-  //   const newIsbn = isbn.replaceAll("-", "");
-  //   console.log(newIsbn);
-  //   previewContainer.current.appendChild(
-  //     window.GBS_insertEmbeddedViewer(`ISBN:0738531367`, 600, 500)
-  //   );
-  // };
 
   useEffect(() => {
     axios({
@@ -31,19 +34,37 @@ function BookDetailPage() {
       .catch((err) => {
         console.log(err);
       });
+
+    // window.google.books.load();
   }, [params.bookId]);
 
-  const { id, image_link, image_small_thumbnail, title, summary, ...details } =
-    book;
+  useEffect(() => {
+    function initialize() {
+      const viewer = new window.google.books.DefaultViewer(
+        document.getElementById("viewerCanvas")
+      );
+      viewer.load(
+        `ISBN:${book.isbn.replaceAll("-", "")}`,
+        () => setEmbbed(false),
+        () => setEmbbed(true)
+      );
+    }
+    if (book?.embeddable) window.google.books.setOnLoadCallback(initialize);
+  }, [book]);
+
+  const {
+    id,
+    image_link,
+    image_small_thumbnail,
+    title,
+    summary,
+    embeddable,
+    average_rating,
+    ...details
+  } = book || {};
 
   return (
-    <Container
-      id="viewerCanvas"
-      ref={previewContainer}
-      sx={{ bgcolor: "#faf9f8", my: 2 }}
-      disableGutters={true}
-    >
-      {/* {window.GBS_insertEmbeddedViewer(`ISBN:0738531367`, 600, 500)} */}
+    <Container sx={{ bgcolor: "#faf9f8", my: 2 }} disableGutters={true}>
       <Box>
         <Grid container columnSpacing={3} rowSpacing={3}>
           <Grid item xs={12} sm={5} md={4} lg={3} xl={2}>
@@ -57,9 +78,12 @@ function BookDetailPage() {
           </Grid>
           <Grid item xs={12} sm={7} md={8} lg={9} xl={10} bgcolor="white">
             <Typography variant="h4" pb={2}>
-              {book.title}
+              {title}
             </Typography>
             <Divider />
+            <Tooltip title="Ratings from Google" placement="right">
+              <Rating value={average_rating || null} precision={0.5} readOnly />
+            </Tooltip>
             <Typography variant="h6" py={2}>
               Description
             </Typography>
@@ -67,6 +91,41 @@ function BookDetailPage() {
               {summary}
             </Typography>
             <BookInfoList info={details} />
+            <Typography variant="h5" mt={2} mb={2}>
+              Preview Book
+            </Typography>
+            {embbed ? (
+              <Box
+                ref={previewContainer}
+                id="viewerCanvas"
+                sx={{ width: "100%", height: 500 }}
+              ></Box>
+            ) : (
+              <Paper
+                variant="outlined"
+                elevation={0}
+                my={2}
+                sx={{
+                  width: "100%",
+                  height: 300,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  color={"GrayText"}
+                  textAlign="center"
+                  my={2}
+                >
+                  Unable to Embbed Preview
+                </Typography>
+                <Button variant="contained">Preview</Button>
+              </Paper>
+            )}
+            {/* {window.GBS_insertEmbeddedViewer(`ISBN:0738531367`, 600, 500)} */}
           </Grid>
         </Grid>
       </Box>

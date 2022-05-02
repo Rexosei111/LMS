@@ -11,8 +11,10 @@ url = "https://www.googleapis.com/books/v1/volumes"
 def get_book_data(isbn: str):
     try:
         response = requests.get(url, {"q": f"isbn:{isbn}","key": key})
-        data = response.json()["items"][0]["volumeInfo"]
-        return data                                                               
+        data = response.json()["items"][0]
+        volumeInfo = data["volumeInfo"]
+        accessInfo = data["accessInfo"]
+        return volumeInfo, accessInfo                                                             
     except ConnectionError:
         print(f"Unable to retrieve data")
         return None

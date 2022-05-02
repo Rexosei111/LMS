@@ -1,11 +1,8 @@
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import ImageIcon from "@mui/icons-material/Image";
-import WorkIcon from "@mui/icons-material/Work";
-import BeachAccessIcon from "@mui/icons-material/BeachAccess";
 import { Grid } from "@mui/material";
 import LanguageIcon from "@mui/icons-material/Language";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -21,7 +18,7 @@ const formatText = (text) => {
 
 const icons = {
   language: <LanguageIcon />,
-  genre: <CategoryIcon />,
+  category: <CategoryIcon />,
   author: <BadgeIcon />,
   publisher: <BadgeIcon />,
   published_date: <EventIcon />,
@@ -31,8 +28,8 @@ const icons = {
 export default function BookInfoList({ info }) {
   return (
     <Grid container rowSpacing={3} columnSpacing={2} sx={{ width: "100%" }}>
-      {Object.entries(info).map((entry) => (
-        <Grid item xs="auto">
+      {Object.entries(info).map((entry, index) => (
+        <Grid item xs="auto" key={index}>
           <ListItem>
             <ListItemAvatar>
               <Avatar>{icons[entry[0]] || <ImageIcon />}</Avatar>

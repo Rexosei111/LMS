@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Layout from "./components/Layout";
 import BooksList from "./components/BooksList";
 
@@ -10,6 +10,9 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const BookDetailPage = lazy(() => import("./pages/BookDetailPage"));
 
 function App() {
+  useEffect(() => {
+    window.google.books.load();
+  }, []);
   return (
     <Suspense fallback="Loading ...">
       <Routes>
