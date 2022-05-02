@@ -1,3 +1,4 @@
+import ast
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -8,19 +9,63 @@ from students.models import Student
 
 # Create your models here.
 
+from django.db import models
+from typing import Iterable
 
-class Genre(models.Model):
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        help_text="Enter a book genre (e.g. Science Fiction, French Poetry etc.)",
-    )
+class ListField(models.TextField):
+    """
+    A custom Django field to represent lists as comma separated strings
+    """
 
-    def number_of_books(self):
-        return Book.objects.filter(genre__pk=self.pk).count()
+    def __init__(self, *args, **kwargs):
+        self.token = kwargs.pop('token', ',')
+        super().__init__(*args, **kwargs)
 
-    def __str__(self):
-        return self.name
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        kwargs['token'] = self.token
+        return name, path, args, kwargs
+
+    def to_python(self, value):
+
+        class SubList(list):
+            def __init__(self, token, *args):
+                self.token = token
+                super().__init__(*args)
+
+            def __str__(self):
+                return self.token.join(self)
+
+        if isinstance(value, list):
+            return value
+        if value is None:
+            return SubList(self.token)
+        return SubList(self.token, value.split(self.token))
+
+    def from_db_value(self, value, expression, connection):
+        return self.to_python(value)
+
+    def get_prep_value(self, value):
+        if not value:
+            return
+        assert(isinstance(value, Iterable))
+        return self.token.join(value)
+
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return self.get_prep_value(value)
+# class Genre(models.Model):
+#     name = models.CharField(
+#         max_length=200,
+#         unique=True,
+#         help_text="Enter a book genre (e.g. Science Fiction, French Poetry etc.)",
+#     )
+
+#     def number_of_books(self):
+#         return Book.objects.filter(genre__pk=self.pk).count()
+
+#     def __str__(self):
+#         return self.name
 
 
 class Language(models.Model):
@@ -48,15 +93,17 @@ class Book(models.Model):
     language = models.ForeignKey(
         Language, on_delete=models.SET_NULL, null=True, blank=True
     )
-    genre = models.ManyToManyField(Genre, blank=True)
     publisher = models.CharField(max_length=100, null=True, blank=True)
     published_date = models.DateField(null=True, blank=True)
     page_count = models.PositiveIntegerField(null=True, blank=True)
     available_copies = models.PositiveIntegerField(null=True, blank=True)
     image_link = models.URLField(null=True, blank=True)
+    embeddable = models.BooleanField(null=True, blank=True)
     image_small_thumbnail = models.URLField(null=True, blank=True)
+    average_rating = models.FloatField(null=True, blank=True)
     shelf_number = models.PositiveIntegerField(null=True, blank=True)
     date_added = models.DateField(auto_now_add=True, null=True)
+    category = ListField(null=True, blank=True)
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -66,21 +113,25 @@ class Book(models.Model):
     )
 
     def clean(self) -> None:
+        print(type(self.category))
         number = "".join(self.isbn.split("-"))
         if(self.fetch_data):
             if len(number) in [10, 13]:
-                data = get_book_data(self.isbn)
-                pub_date = get_date(data["publishedDate"])
-                if(data):
-                    author = data.get("authors", None)
+                volumeInfo, accessInfo = get_book_data(self.isbn)
+                pub_date = get_date(volumeInfo["publishedDate"])
+                if(volumeInfo):
+                    author = volumeInfo.get("authors", None)
                     self.author = author[0] if author else None
-                    self.title = data["title"] or self.title
-                    self.publisher = data["publisher"] or None
+                    self.title = volumeInfo["title"] or self.title
+                    self.publisher = volumeInfo["publisher"] or None
                     self.published_date =  pub_date
-                    self.page_count = data.get("pageCount", None)
-                    self.summary = data["description"] or None
-                    self.image_link = data["imageLinks"]["thumbnail"] or None
-                    self.image_small_thumbnail = data["imageLinks"]["smallThumbnail"] or None
+                    self.page_count = volumeInfo.get("pageCount", None)
+                    self.summary = volumeInfo["description"] or None
+                    self.image_link = volumeInfo["imageLinks"]["thumbnail"] or None
+                    self.embeddable = accessInfo.get("embeddable", None)
+                    self.average_rating = volumeInfo.get("averageRating", 0.0)
+                    self.category = volumeInfo.get("categories", None)
+                    self.image_small_thumbnail = volumeInfo["imageLinks"]["smallThumbnail"] or None
                     
                 else:
                     raise ValidationError("Unable to retrieve book data")

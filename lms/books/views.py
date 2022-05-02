@@ -5,17 +5,18 @@ from .serializer import BookDetailSerializer, BookSerializer, Book
 class BookList(generics.ListAPIView):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ["title", "author", "isbn", "genre__name"]
+    search_fields = ["title", "author", "isbn", "category"]
 
     def get_queryset(self):
         queryset = Book.objects.all().order_by("-date_added")
         search_query = self.request.query_params.get("search")
         if(search_query is not None):
+            search_query = search_query.strip()
             filters = {
                 "author": queryset.filter(author__icontains=search_query),
                 "title": queryset.filter(title__icontains=search_query),
                 "isbn": queryset.filter(isbn__iexact=search_query),
-                "genre": queryset.filter(genre__name__icontains=search_query)
+                "category": queryset.filter(category__icontains=search_query)
             }
             pub_date = self.request.query_params.get("pub_date")
             

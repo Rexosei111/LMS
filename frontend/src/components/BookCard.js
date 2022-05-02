@@ -2,8 +2,7 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { CardActionArea, useMediaQuery } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { CardActionArea } from "@mui/material";
 
 export const truncateBookTitle = (text) => {
   if (text && text.length > 250) {
@@ -14,11 +13,8 @@ export const truncateBookTitle = (text) => {
 };
 
 function BookCard({ book }) {
-  const large = useMediaQuery("(min-width:1200px)");
-  const navigate = useNavigate();
-
   const viewBook = (event, id) => {
-    navigate(`/books/${id}`);
+    window.location.href = `/books/${id}`;
   };
 
   return (
@@ -34,7 +30,6 @@ function BookCard({ book }) {
             alignItems: "center",
             justifyContent: "center",
             height: "200px",
-            // backgroundColor: "black",
           }}
         >
           <img src={book.image_small_thumbnail} alt="" />

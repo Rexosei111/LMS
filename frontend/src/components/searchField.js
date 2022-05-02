@@ -26,7 +26,11 @@ export default function SearchField({ filter, date }) {
   };
 
   const handleSearch = (event) => {
-    navigate(`/books?search=${query}`);
+    navigate(
+      `/books?search=${query}${filter ? `&filter=${filter}` : ""}${
+        date ? `&pub_date=${date}` : ""
+      }`
+    );
   };
   return (
     <Stack spacing={2} mt={2}>

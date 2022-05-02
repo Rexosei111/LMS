@@ -2,7 +2,7 @@ from lms.admin import admin_site
 from django.contrib import admin
 
 from .forms import BookForm, IssuedDetailForm
-from .models import Book, Genre, IssuedDetail, Language
+from .models import Book, IssuedDetail, Language
 
 # Register your models here.
 
@@ -10,16 +10,14 @@ from .models import Book, Genre, IssuedDetail, Language
 class BookAdmin(admin.ModelAdmin):
     form = BookForm
     list_display = ["title", "author", "available_copies", "date_added"]
-    filter_horizontal = ["genre"]
     autocomplete_fields = ["language"]
     readonly_fields = ["added_by"]
-    search_fields = ["title", "genre__name", "author", "isbn", "language__name"]
-    list_filter = ["author", "genre__name"]
-    # list_editable = ["available_copies"]
+    search_fields = ["title", "author", "isbn", "language__name"]
+    list_filter = ["author"]
 
     fieldsets = (
         (None, {"fields": ["fetch_data", "title", "author", "isbn", "available_copies"]}),
-        ("Other", {"fields": [("publisher", "published_date"), "image_link", ("shelf_number", "page_count"),"language", "genre"]}),
+        ("Other", {"fields": [("publisher", "published_date"), "image_link", ("shelf_number", "page_count"),"language", "embeddable", "average_rating", "category"]}),
     )
 
     def save_model(self, request, obj, form, change):
@@ -47,8 +45,8 @@ class CustomIssuedDetailsAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-class CustomGenreAdmin(admin.ModelAdmin):
-    list_display = ["name", "number_of_books"]
+# class CustomGenreAdmin(admin.ModelAdmin):
+#     list_display = ["name", "number_of_books"]
 
 
 class CustomLanguageAdmin(admin.ModelAdmin):
@@ -56,6 +54,5 @@ class CustomLanguageAdmin(admin.ModelAdmin):
 
 
 admin_site.register(Book, BookAdmin)
-admin_site.register(Genre, CustomGenreAdmin)
 admin_site.register(Language, CustomLanguageAdmin)
 admin_site.register(IssuedDetail, CustomIssuedDetailsAdmin)
