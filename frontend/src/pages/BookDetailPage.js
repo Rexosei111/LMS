@@ -13,6 +13,8 @@ import {
 import BookInfoList from "../components/BookInfoList";
 import Rating from "@mui/material/Rating";
 import Tooltip from "@mui/material/Tooltip";
+import BookReviewForm from "../components/BookReviewForm";
+import BookReviews from "../components/BookReviews";
 
 function BookDetailPage() {
   const params = useParams();
@@ -125,7 +127,8 @@ function BookDetailPage() {
                 <Button variant="contained">Preview</Button>
               </Paper>
             )}
-            {/* {window.GBS_insertEmbeddedViewer(`ISBN:0738531367`, 600, 500)} */}
+            <BookReviews />
+            <BookReviewForm />
           </Grid>
         </Grid>
       </Box>
