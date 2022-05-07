@@ -1,4 +1,3 @@
-from django.shortcuts import render
 
 from .serializers import StudentSerializer
 from rest_framework.response import Response
@@ -13,7 +12,6 @@ from rest_framework.permissions import AllowAny
 @parser_classes([JSONParser])
 def RegisterStudent(request):
     data = request.data
-    print(data)
     serialzer = StudentSerializer(data=data)
     if serialzer.is_valid():
         student = serialzer.save()

@@ -1,10 +1,10 @@
 from django import forms
-from .models import Book, IssuedDetail
+from .models import Book, BorrowedBooks
 
 
-class IssuedDetailForm(forms.ModelForm):
+class BorrowedBooksForm(forms.ModelForm):
     class Meta:
-        model = IssuedDetail
+        model = BorrowedBooks
         fields = "__all__"
         # exclude = ["issued_by"]
 

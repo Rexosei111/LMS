@@ -1,15 +1,15 @@
 from lms.admin import admin_site
 from django.contrib import admin
 
-from .forms import BookForm, IssuedDetailForm
-from .models import Book, IssuedDetail, Language
+from .forms import BookForm, BorrowedBooks, BorrowedBooksForm
+from .models import Book, BorrowedBooks, Language, BookReview
 
 # Register your models here.
 
 
 class BookAdmin(admin.ModelAdmin):
     form = BookForm
-    list_display = ["title", "author", "available_copies", "date_added"]
+    list_display = ["title", "author", "available_copies", "average_rating"]
     autocomplete_fields = ["language"]
     readonly_fields = ["added_by"]
     search_fields = ["title", "author", "isbn", "language__name"]
@@ -25,8 +25,8 @@ class BookAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-class CustomIssuedDetailsAdmin(admin.ModelAdmin):
-    form = IssuedDetailForm
+class CustomBorrowedBooksAdmin(admin.ModelAdmin):
+    form = BorrowedBooksForm
     readonly_fields = ["issued_by"]
     autocomplete_fields = ["book", "student"]
     list_display = ["book", "student", "deadline"]
@@ -45,8 +45,8 @@ class CustomIssuedDetailsAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-# class CustomGenreAdmin(admin.ModelAdmin):
-#     list_display = ["name", "number_of_books"]
+class CustomReviewAdmin(admin.ModelAdmin):
+    list_display = ["email", "book", "rating"]
 
 
 class CustomLanguageAdmin(admin.ModelAdmin):
@@ -55,4 +55,5 @@ class CustomLanguageAdmin(admin.ModelAdmin):
 
 admin_site.register(Book, BookAdmin)
 admin_site.register(Language, CustomLanguageAdmin)
-admin_site.register(IssuedDetail, CustomIssuedDetailsAdmin)
+admin_site.register(BookReview, CustomReviewAdmin)
+admin_site.register(BorrowedBooks, CustomBorrowedBooksAdmin)

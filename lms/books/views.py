@@ -1,7 +1,10 @@
 from datetime import datetime
 from rest_framework import generics, filters
-from .serializer import BookDetailSerializer, BookSerializer, Book
-
+from .serializer import AddReviewSerializer, BookDetailSerializer, BookSerializer, Book, ReviewSerializer, BookReview
+from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view, parser_classes, permission_classes
+from rest_framework.permissions import AllowAny
 class BookList(generics.ListAPIView):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
@@ -38,3 +41,25 @@ class GetBook(generics.RetrieveAPIView):
     serializer_class = BookDetailSerializer
     lookup_field = "pk"
     queryset = Book.objects.all()
+    
+class GetReviews(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    
+    def get_queryset(self):
+        print("Im called")
+        queryset = BookReview.objects.filter(book__pk=self.kwargs.get("book_pk")).order_by("-reviewed_at")
+        return queryset
+    
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@parser_classes([JSONParser])
+def AddBookReview(request, book_pk):
+    data = request.data
+    print(data)
+    serialzer = AddReviewSerializer(data={**data, "book": book_pk})
+    if serialzer.is_valid():
+        review = serialzer.save()
+        return Response(status=200)
+    else:
+        return Response(serialzer.errors, 400)

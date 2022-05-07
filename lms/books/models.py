@@ -146,7 +146,7 @@ class Book(models.Model):
         return self.title
 
 
-class IssuedDetail(models.Model):
+class BorrowedBooks(models.Model):
     book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     issued_by = models.ForeignKey(
@@ -161,3 +161,21 @@ class IssuedDetail(models.Model):
 
     def __str__(self):
         return f"{self.student} - {self.book}"
+
+RATING = (
+    (0, "0"),
+    (1, "1"),
+    (2, "2"),
+    (3, "3"),
+    (4, "4"),
+    (5, "5")
+)
+class BookReview(models.Model):
+    email = models.EmailField()
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(null=True, help_text="Rate this book on the scale of 1 - 5", choices=RATING)
+    review = models.TextField(null=True)
+    reviewed_at = models.DateField(auto_now=True)
+    
+    def __str__(self):
+        return self.email

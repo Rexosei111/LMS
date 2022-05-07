@@ -1,4 +1,4 @@
-from .models import Book, IssuedDetail
+from .models import Book, BookReview
 from rest_framework import serializers
 
 class BookSerializer(serializers.ModelSerializer):
@@ -11,3 +11,13 @@ class BookDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         exclude = ["added_by", "fetch_data", "date_added"]
+        
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookReview
+        exclude = ["book"]
+        
+class AddReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookReview
+        exclude = ["reviewed_at"]
