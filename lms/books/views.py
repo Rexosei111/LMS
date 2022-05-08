@@ -36,7 +36,8 @@ class BookList(generics.ListAPIView):
 class RecentBooks(generics.ListAPIView):
     queryset = Book.objects.all().order_by("-date_added")[:8]
     serializer_class = BookSerializer
-
+    
+    
 class GetBook(generics.RetrieveAPIView):
     serializer_class = BookDetailSerializer
     lookup_field = "pk"

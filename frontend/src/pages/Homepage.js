@@ -12,6 +12,7 @@ function Homepage() {
   return (
     <>
       <HeroSection />
+
       <FeaturedBooks />
       <LibraryTime />
       <RegisterForm />

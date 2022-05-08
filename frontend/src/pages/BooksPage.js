@@ -1,10 +1,11 @@
 import { Box, Container, MenuItem, TextField } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { Suspense, useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import SearchField from "../components/searchField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import LoadingSkeleton from "../components/Skeleton";
 
 const filterOptions = [
   {
@@ -77,7 +78,9 @@ function BooksPage() {
           </LocalizationProvider>
         </Box>
       </Box>
-      <Outlet />
+      <Suspense fallback={<LoadingSkeleton />}>
+        <Outlet />
+      </Suspense>
     </Container>
   );
 }
