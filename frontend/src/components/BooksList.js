@@ -17,7 +17,7 @@ function BooksList() {
   useEffect(() => {
     async function getBooks() {
       const { data } = await axios.get(
-        `http://localhost:8000/api/books?${query}`
+        `https://kyei.pythonanywhere.com/api/books?${query}`
       );
       setBooks(data.results);
       setNext(data.next);

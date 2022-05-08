@@ -49,10 +49,13 @@ function BookReviewForm() {
     onSubmit: async (values) => {
       setLoading(true);
       axios
-        .post(`http://localhost:8000/api/books/${params.bookId}/reviews/new`, {
-          ...values,
-          rating: parseInt(values.rating),
-        })
+        .post(
+          `https://kyei.pythonanywhere.com/api/books/${params.bookId}/reviews/new`,
+          {
+            ...values,
+            rating: parseInt(values.rating),
+          }
+        )
         .then((res) => {
           setLoading(false);
           setSuccess(true);

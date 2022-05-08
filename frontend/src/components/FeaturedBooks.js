@@ -18,7 +18,7 @@ function FeaturedBooks() {
   useEffect(() => {
     async function getBooks() {
       const { data } = await axios.get(
-        "http://localhost:8000/api/books/recent"
+        "https://kyei.pythonanywhere.com/api/books/recent"
       );
       setBooks(data.results);
     }

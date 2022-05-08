@@ -69,7 +69,7 @@ function RegisterForm() {
     onSubmit: async (values) => {
       setLoading(true);
       axios
-        .post("http://localhost:8000/api/students/register", values)
+        .post("https://kyei.pythonanywhere.com/api/students/register", values)
         .then((res) => {
           setLoading(false);
           setSuccess(true);

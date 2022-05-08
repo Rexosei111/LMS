@@ -25,7 +25,7 @@ function BookDetailPage() {
   useEffect(() => {
     axios({
       method: "get",
-      url: `http://localhost:8000/api/books/${params.bookId}`,
+      url: `https://kyei.pythonanywhere.com/api/books/${params.bookId}`,
       headers: {
         "Content-type": "application/json",
       },
