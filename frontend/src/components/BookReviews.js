@@ -66,7 +66,7 @@ function BookReviews() {
 
   useEffect(() => {
     axios({
-      url: `http://localhost:8000/api/books/${params.bookId}/reviews`,
+      url: `https://kyei.pythonanywhere.com/api/books/${params.bookId}/reviews`,
       method: "GET",
     })
       .then((response) => {
