@@ -1,14 +1,7 @@
-import {
-  Container,
-  List,
-  ListItemButton,
-  Popover,
-  useMediaQuery,
-} from "@mui/material";
+import { Container, List, ListItemButton, Popover } from "@mui/material";
 import React from "react";
 
 function Menu({ anchorEl, setAnchorEl }) {
-  const matches = useMediaQuery("(max-width: 400px)");
   const handleClose = () => {
     setAnchorEl(null);
   };

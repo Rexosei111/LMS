@@ -54,19 +54,6 @@ class ListField(models.TextField):
     def value_to_string(self, obj):
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
-# class Genre(models.Model):
-#     name = models.CharField(
-#         max_length=200,
-#         unique=True,
-#         help_text="Enter a book genre (e.g. Science Fiction, French Poetry etc.)",
-#     )
-
-#     def number_of_books(self):
-#         return Book.objects.filter(genre__pk=self.pk).count()
-
-#     def __str__(self):
-#         return self.name
-
 
 class Language(models.Model):
     name = models.CharField(

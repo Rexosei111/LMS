@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Container } from "@mui/material";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
@@ -6,19 +6,17 @@ import TopNav from "./TopNav";
 
 function Layout() {
   return (
-    <Box
+    <Container
+      maxWidth="xl"
+      disableGutters
       sx={{
         overflowX: "hidden",
-        // height: "100vh",
-        // display: "flex",
-        // flexDirection: "column",
-        // alignItems: "space-between",
       }}
     >
       <TopNav />
       <Outlet />
       <Footer />
-    </Box>
+    </Container>
   );
 }
 

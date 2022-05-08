@@ -28,7 +28,7 @@ class BookList(generics.ListAPIView):
             except Exception:
                 date = None
             filter = self.request.query_params.get("filter", None)
-            queryset = filters[filter]
+            if(filter): queryset = filters[filter]
             if(date is not None): 
                 queryset = queryset.filter(published_date__gte=date)
         return queryset

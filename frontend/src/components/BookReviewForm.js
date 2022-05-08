@@ -2,26 +2,18 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import {
-  Box,
-  Button,
   Container,
-  IconButton,
   InputAdornment,
   Paper,
   Rating,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-// import BadgeOutlinedIcon from "@mui/icons-material/BadgeOutlined";
-// import NumbersOutlinedIcon from "@mui/icons-material/NumbersOutlined";
-// import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
-// import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
+
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
-import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
 import { useParams } from "react-router-dom";
 
 const initialValues = {
@@ -39,6 +31,10 @@ const validate = (values) => {
     errors.email = "Invalid Email Format";
   }
 
+  if (!values.rating && !values.review) {
+    errors.review = "This field may not be left blank";
+  }
+
   return errors;
 };
 
@@ -48,9 +44,6 @@ function BookReviewForm() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(null);
-  const large = useMediaQuery("(max-width:900px)");
-
-  const small = useMediaQuery("(max-width:500px)");
   const formik = useFormik({
     initialValues,
     onSubmit: async (values) => {
@@ -66,12 +59,13 @@ function BookReviewForm() {
           setError(false);
         })
         .catch((err) => {
-          setErrorMessage(err.response.data);
+          setErrorMessage((prevState) => ({
+            ...prevState,
+            ...err.response.data,
+          }));
           setLoading(false);
           setSuccess(false);
           setError(true);
-          console.log(err.response.data);
-          console.log(errorMessage);
         });
       setLoading(false);
     },
@@ -79,16 +73,13 @@ function BookReviewForm() {
   });
   return (
     <Container
-      // maxWidth="xl"
       id="registration"
       disableGutters
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        // flexWrap: large ? "wrap" : "no-wrap",
         justifyContent: "center",
-        // bgcolor: "green",
         width: "100%",
         py: 2,
         mb: 4,
@@ -105,8 +96,6 @@ function BookReviewForm() {
             display: "flex",
             flexDirection: "column",
             gap: "20px",
-            // width: small ? "100%" : 400,
-            // flexShrink: 1,
           }}
           onSubmit={formik.handleSubmit}
           noValidate
@@ -114,7 +103,8 @@ function BookReviewForm() {
           <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
             <TextField
               error={
-                (formik.touched.email && formik.errors.email) || error
+                (formik.touched.email && formik.errors.email) ||
+                (error && errorMessage.email)
                   ? true
                   : false
               }
@@ -123,9 +113,9 @@ function BookReviewForm() {
               type="Email"
               label="Email"
               helperText={
-                formik.touched.email
+                formik.touched.email && formik.errors.email
                   ? formik.errors.email
-                  : error
+                  : error && errorMessage.email
                   ? errorMessage.email[0]
                   : null
               }
@@ -142,7 +132,8 @@ function BookReviewForm() {
                   </InputAdornment>
                 ),
                 endAdornment:
-                  (formik.touched.email && formik.errors.email) || error ? (
+                  (formik.touched.email && formik.errors.email) ||
+                  (error && errorMessage.email) ? (
                     <InputAdornment position="end">
                       <ErrorOutlineIcon color="error" />
                     </InputAdornment>
@@ -160,40 +151,6 @@ function BookReviewForm() {
               justifyContent: "center",
             }}
           >
-            {/* <TextField
-                error={
-                  formik.touched.rating && formik.errors.rating ? true : false
-                }
-                id="rating"
-                name="rating"
-                label="rating"
-                helperText={
-                  formik.touched.rating
-                    ? formik.errors.rating
-                    : error
-                    ? errorMessage.index_number[0]
-                    : null
-                }
-                value={formik.values.rating}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                autoComplete="current-rating"
-                variant="outlined"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <StarBorderPurple500Icon color="action" />
-                    </InputAdornment>
-                  ),
-                  endAdornment:
-                    formik.touched.rating && formik.errors.rating ? (
-                      <InputAdornment position="end">
-                        <ErrorOutlineIcon color="error" />
-                      </InputAdornment>
-                    ) : undefined,
-                }}
-                fullWidth
-              /> */}
             <Rating
               value={parseInt(formik.values.rating)}
               onChange={formik.handleChange}
@@ -205,7 +162,10 @@ function BookReviewForm() {
           <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
             <TextField
               error={
-                formik.touched.review && formik.errors.review ? true : false
+                (formik.touched.review && formik.errors.review) ||
+                (error && errorMessage.review)
+                  ? true
+                  : false
               }
               id="review"
               name="review"
@@ -213,20 +173,22 @@ function BookReviewForm() {
               multiline
               rows={6}
               // maxRows={10}
-              helperText={formik.touched.review ? formik.errors.review : null}
+              helperText={
+                formik.touched.review && formik.errors.review
+                  ? formik.errors.review
+                  : error && errorMessage.review
+                  ? errorMessage.review[0]
+                  : null
+              }
               value={formik.values.review}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               autoComplete="current-review"
               variant="outlined"
               InputProps={{
-                //   startAdornment: (
-                //     <InputAdornment position="start">
-                //       <LocalLibraryOutlinedIcon color="action" />
-                //     </InputAdornment>
-                //   ),
                 endAdornment:
-                  formik.touched.review && formik.errors.review ? (
+                  (formik.touched.review && formik.errors.review) ||
+                  (error && errorMessage.review) ? (
                     <InputAdornment position="end">
                       <ErrorOutlineIcon color="error" />
                     </InputAdornment>
@@ -258,7 +220,6 @@ function BookReviewForm() {
           </LoadingButton>
         </form>
       </Paper>
-      {/* </Box> */}
     </Container>
   );
 }

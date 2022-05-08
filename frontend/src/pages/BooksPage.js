@@ -70,7 +70,6 @@ function BooksPage() {
               views={["year", "month", "day"]}
               value={date}
               onChange={(newValue) => {
-                // console.log(dateRef.target.value);
                 setDate(newValue);
               }}
               renderInput={(params) => <TextField {...params} />}

@@ -37,18 +37,13 @@ function LogoText() {
   );
 }
 export default function TopNav() {
-  const [El, setAnchorEl] = React.useState(null);
-
   const small = useMediaQuery("(max-width:790px)");
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
   return (
     <Box
       sx={{
         // flexGrow: 1,
-        width: "100vw",
+        width: "100%",
       }}
     >
       <AppBar
@@ -84,20 +79,38 @@ export default function TopNav() {
               >
                 Home
               </Button>
-              <Button
-                sx={{
-                  color: "#6f6efc",
-                  borderColor: "#6f6efc",
-                  "&:hover": {
-                    bgcolor: "#6f6efc",
-                    color: "white",
-                  },
-                }}
-                variant="outlined"
-                href="#registration"
-              >
-                Register
-              </Button>
+              {window.location.pathname === "/" ? (
+                <Button
+                  sx={{
+                    color: "#6f6efc",
+                    borderColor: "#6f6efc",
+                    "&:hover": {
+                      bgcolor: "#6f6efc",
+                      color: "white",
+                    },
+                  }}
+                  variant="outlined"
+                  href="/#registration"
+                >
+                  Register
+                </Button>
+              ) : (
+                <Button
+                  sx={{
+                    color: "#6f6efc",
+                    borderColor: "#6f6efc",
+                    "&:hover": {
+                      bgcolor: "#6f6efc",
+                      color: "white",
+                    },
+                  }}
+                  variant="outlined"
+                  component={Link}
+                  to="/#registration"
+                >
+                  Register
+                </Button>
+              )}
               <Button
                 variant="outlined"
                 sx={{

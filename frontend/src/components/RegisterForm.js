@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import {
   Box,
-  Button,
   Container,
-  IconButton,
   InputAdornment,
   Paper,
   TextField,
@@ -63,6 +61,7 @@ function RegisterForm() {
   const [errorMessage, setErrorMessage] = useState({});
   const [success, setSuccess] = useState(null);
   const large = useMediaQuery("(max-width:900px)");
+  const formRef = useRef();
 
   const small = useMediaQuery("(max-width:500px)");
   const formik = useFormik({
@@ -77,20 +76,23 @@ function RegisterForm() {
           setError(false);
         })
         .catch((err) => {
-          setErrorMessage(err.response.data);
+          setErrorMessage((prevState) => ({
+            ...prevState,
+            ...err.response.data,
+          }));
           setLoading(false);
           setSuccess(false);
           setError(true);
-          console.log(err.response.data);
-          console.log(errorMessage);
         });
       setLoading(false);
     },
     validate,
   });
+
   return (
     <Container
       maxWidth="xl"
+      ref={formRef}
       id="registration"
       sx={{
         display: "flex",
@@ -147,7 +149,8 @@ function RegisterForm() {
             >
               <TextField
                 error={
-                  formik.touched.first_name && formik.errors.first_name
+                  (formik.touched.first_name && formik.errors.first_name) ||
+                  (error && errorMessage.first_name)
                     ? true
                     : false
                 }
@@ -155,9 +158,9 @@ function RegisterForm() {
                 name="first_name"
                 label="First Name"
                 helperText={
-                  formik.touched.first_name
+                  formik.touched.first_name && formik.errors.first_name
                     ? formik.errors.first_name
-                    : error
+                    : error && errorMessage.first_name
                     ? errorMessage.first_name[0]
                     : null
                 }
@@ -174,7 +177,8 @@ function RegisterForm() {
                     </InputAdornment>
                   ),
                   endAdornment:
-                    formik.touched.first_name && formik.errors.first_name ? (
+                    (formik.touched.first_name && formik.errors.first_name) ||
+                    (error && errorMessage.first_name) ? (
                       <InputAdornment position="end">
                         <ErrorOutlineIcon color="error" />
                       </InputAdornment>
@@ -188,7 +192,8 @@ function RegisterForm() {
             >
               <TextField
                 error={
-                  formik.touched.last_name && formik.errors.last_name
+                  (formik.touched.last_name && formik.errors.last_name) ||
+                  (error && errorMessage.last_name)
                     ? true
                     : false
                 }
@@ -196,9 +201,9 @@ function RegisterForm() {
                 name="last_name"
                 label="Last Name"
                 helperText={
-                  formik.touched.last_name
+                  formik.touched.last_name && formik.errors.last_name
                     ? formik.errors.last_name
-                    : error
+                    : error && errorMessage.last_name
                     ? errorMessage.last_name[0]
                     : null
                 }
@@ -215,7 +220,8 @@ function RegisterForm() {
                     </InputAdornment>
                   ),
                   endAdornment:
-                    formik.touched.last_name && formik.errors.last_name ? (
+                    (formik.touched.last_name && formik.errors.last_name) ||
+                    (error && errorMessage.last_name) ? (
                       <InputAdornment position="end">
                         <ErrorOutlineIcon color="error" />
                       </InputAdornment>
@@ -230,7 +236,8 @@ function RegisterForm() {
             >
               <TextField
                 error={
-                  (formik.touched.email && formik.errors.email) || error
+                  (formik.touched.email && formik.errors.email) ||
+                  (error && errorMessage.email)
                     ? true
                     : false
                 }
@@ -239,9 +246,9 @@ function RegisterForm() {
                 type="Email"
                 label="Email"
                 helperText={
-                  formik.touched.email
+                  formik.touched.email && formik.errors.email
                     ? formik.errors.email
-                    : error
+                    : error && errorMessage.email
                     ? errorMessage.email[0]
                     : null
                 }
@@ -258,7 +265,8 @@ function RegisterForm() {
                     </InputAdornment>
                   ),
                   endAdornment:
-                    (formik.touched.email && formik.errors.email) || error ? (
+                    (formik.touched.email && formik.errors.email) ||
+                    (error && errorMessage.email) ? (
                       <InputAdornment position="end">
                         <ErrorOutlineIcon color="error" />
                       </InputAdornment>
@@ -272,7 +280,8 @@ function RegisterForm() {
             >
               <TextField
                 error={
-                  formik.touched.index_number && formik.errors.index_number
+                  (formik.touched.index_number && formik.errors.index_number) ||
+                  (error && errorMessage.index_number)
                     ? true
                     : false
                 }
@@ -280,9 +289,9 @@ function RegisterForm() {
                 name="index_number"
                 label="Index Number"
                 helperText={
-                  formik.touched.index_number
+                  formik.touched.index_number && formik.errors.index_number
                     ? formik.errors.index_number
-                    : error
+                    : error && errorMessage.index_number
                     ? errorMessage.index_number[0]
                     : null
                 }
@@ -298,8 +307,9 @@ function RegisterForm() {
                     </InputAdornment>
                   ),
                   endAdornment:
-                    formik.touched.index_number &&
-                    formik.errors.index_number ? (
+                    (formik.touched.index_number &&
+                      formik.errors.index_number) ||
+                    (error && errorMessage.index_number) ? (
                       <InputAdornment position="end">
                         <ErrorOutlineIcon color="error" />
                       </InputAdornment>
@@ -313,7 +323,8 @@ function RegisterForm() {
             >
               <TextField
                 error={
-                  formik.touched.programme && formik.errors.programme
+                  (formik.touched.programme && formik.errors.programme) ||
+                  (error && errorMessage.programme)
                     ? true
                     : false
                 }
@@ -321,7 +332,11 @@ function RegisterForm() {
                 name="programme"
                 label="programme"
                 helperText={
-                  formik.touched.programme ? formik.errors.programme : null
+                  formik.touched.programme && formik.errors.programme
+                    ? formik.errors.programme
+                    : error && errorMessage.programme
+                    ? errorMessage.programme[0]
+                    : null
                 }
                 value={formik.values.programme}
                 onChange={formik.handleChange}
@@ -335,7 +350,8 @@ function RegisterForm() {
                     </InputAdornment>
                   ),
                   endAdornment:
-                    formik.touched.programme && formik.errors.programme ? (
+                    (formik.touched.programme && formik.errors.programme) ||
+                    (error && errorMessage.programme) ? (
                       <InputAdornment position="end">
                         <ErrorOutlineIcon color="error" />
                       </InputAdornment>
@@ -349,13 +365,22 @@ function RegisterForm() {
             >
               <TextField
                 error={
-                  formik.touched.level && formik.errors.level ? true : false
+                  (formik.touched.level && formik.errors.level) ||
+                  (error && errorMessage.level)
+                    ? true
+                    : false
                 }
                 id="level"
                 name="level"
                 type={"number"}
                 label="Level"
-                helperText={formik.touched.level ? formik.errors.level : null}
+                helperText={
+                  formik.touched.level && formik.errors.level
+                    ? formik.errors.level
+                    : error && errorMessage.level
+                    ? errorMessage.level[0]
+                    : null
+                }
                 value={formik.values.level}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -368,7 +393,8 @@ function RegisterForm() {
                     </InputAdornment>
                   ),
                   endAdornment:
-                    formik.touched.level && formik.errors.level ? (
+                    (formik.touched.level && formik.errors.level) ||
+                    (error && errorMessage.level) ? (
                       <InputAdornment position="end">
                         <ErrorOutlineIcon color="error" />
                       </InputAdornment>
@@ -382,7 +408,8 @@ function RegisterForm() {
             >
               <TextField
                 error={
-                  formik.touched.phone_number && formik.errors.phone_number
+                  (formik.touched.phone_number && formik.errors.phone_number) ||
+                  (error && errorMessage.phone_number)
                     ? true
                     : false
                 }
@@ -390,8 +417,10 @@ function RegisterForm() {
                 name="phone_number"
                 label="Phone"
                 helperText={
-                  formik.touched.phone_number
+                  formik.touched.phone_number && formik.errors.phone_number
                     ? formik.errors.phone_number
+                    : error && errorMessage.phone_number
+                    ? errorMessage.phone_number[0]
                     : null
                 }
                 value={formik.values.phone_number}
@@ -406,8 +435,9 @@ function RegisterForm() {
                     </InputAdornment>
                   ),
                   endAdornment:
-                    formik.touched.phone_number &&
-                    formik.errors.phone_number ? (
+                    (formik.touched.phone_number &&
+                      formik.errors.phone_number) ||
+                    (error && errorMessage.phone_number) ? (
                       <InputAdornment position="end">
                         <ErrorOutlineIcon color="error" />
                       </InputAdornment>
