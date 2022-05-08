@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import FeaturedBooks from "../components/FeaturedBooks";
 import HeroSection from "../components/HeroSection";
 import LibraryTime from "../components/LibraryTime";
 import RegisterForm from "../components/RegisterForm";
+import LoadingSkeleton from "../components/Skeleton";
 
 function Homepage() {
   useEffect(() => {
@@ -12,8 +13,9 @@ function Homepage() {
   return (
     <>
       <HeroSection />
-
-      <FeaturedBooks />
+      <Suspense fallback={<LoadingSkeleton />}>
+        <FeaturedBooks />
+      </Suspense>
       <LibraryTime />
       <RegisterForm />
     </>
