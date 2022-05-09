@@ -131,7 +131,11 @@ function RegisterForm() {
           width: small ? "100%" : "50%",
         }}
       >
-        <Paper variant="outlined" elevation={0} sx={{ p: 2 }}>
+        <Paper
+          variant="outlined"
+          elevation={0}
+          sx={{ p: 2, width: small ? "100%" : null }}
+        >
           <form
             action="#"
             method="POST"

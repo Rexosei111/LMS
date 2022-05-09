@@ -5,7 +5,6 @@ import BookCard from "./BookCard";
 import Paginator from "./Paginator";
 import { Box } from "@mui/system";
 import { useLocation } from "react-router-dom";
-import LoadingSkeleton from "./Skeleton";
 
 function BooksList() {
   const location = useLocation();
@@ -28,7 +27,12 @@ function BooksList() {
     getBooks();
   }, [query]);
   return (
-    <Suspense fallback={<LoadingSkeleton />}>
+    <>
+      <Typography variant="h4" ml={3}>
+        {!query.has("search")
+          ? "List of Available Books"
+          : `Results for '${query.get("search")}'`}
+      </Typography>
       <Container maxWidth="xl" sx={{ bgcolor: "#faf9f8", py: 2 }}>
         {Books.length === 0 ? (
           <Typography
@@ -39,20 +43,21 @@ function BooksList() {
             Book Not Found
           </Typography>
         ) : (
-          <Box>
-            <Grid container>
-              <Grid container item xs={12} rowSpacing={2}>
-                {Books.map((book) => (
-                  <Grid item key={book.id} xs={12} sm={5} md={4} lg={3} xl={3}>
-                    <BookCard book={book} />
-                  </Grid>
-                ))}
+          <Grid
+            container
+            spacing={3}
+            justifyContent="center"
+            alignItems={"flex-start"}
+          >
+            {Books.map((book) => (
+              <Grid item key={book.id} xs={12} sm={5} md={4} lg={3} xl={3}>
+                <BookCard book={book} key={book.id} />
               </Grid>
-            </Grid>
-          </Box>
+            ))}
+          </Grid>
         )}
         <Box
-          mt={2}
+          my={2}
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}
         >
           {(next || previous) && (
@@ -67,7 +72,7 @@ function BooksList() {
           )}
         </Box>
       </Container>
-    </Suspense>
+    </>
   );
 }
 

@@ -12,14 +12,14 @@ export const truncateBookTitle = (text) => {
   return text;
 };
 
-function BookCard({ book }) {
+function BookCard({ book, wrap = true }) {
   const viewBook = (event, id) => {
     window.location.href = `/books/${id}`;
   };
 
   return (
     <Card
-      sx={{ width: 260, maxHeight: 350, flexShrink: 0 }}
+      sx={{ width: wrap ? "100%" : 260, maxHeight: 350, flexShrink: 0 }}
       variant="outlined"
       raised={false}
     >

@@ -1,4 +1,4 @@
-import { Container, Fab, Stack, styled, Typography } from "@mui/material";
+import { Container, Fab, Grid, Stack, styled, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import BookCard from "./BookCard";
@@ -66,19 +66,9 @@ function FeaturedBooks() {
       >
         <ArrowBackIosIcon fontSize="medium" />
       </CustomFab>
-      <Stack
-        ref={recent}
-        direction="row"
-        overflow="hidden"
-        spacing={2}
-        sx={{
-          "& > img": {
-            borderRadius: 5,
-          },
-        }}
-      >
+      <Stack ref={recent} direction="row" overflow="hidden" spacing={2}>
         {Books.map((book) => (
-          <BookCard book={book} key={book.id} />
+          <BookCard book={book} wrap={false} key={book.id} />
         ))}
       </Stack>
       <CustomFab

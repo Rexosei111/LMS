@@ -34,7 +34,7 @@ function BooksPage() {
     setFilter(event.target.value);
   };
   return (
-    <Container maxWidth="xl" sx={{ mt: 2, pt: 2, pb: 2 }}>
+    <Container maxWidth="xl" sx={{ mt: 2, pt: 2, pb: 2 }} disableGutters>
       <Box
         sx={{
           display: "flex",

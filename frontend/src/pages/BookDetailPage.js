@@ -41,6 +41,7 @@ function BookDetailPage() {
   }, [params.bookId]);
 
   useEffect(() => {
+    // window.google.books.load();
     function initialize() {
       const viewer = new window.google.books.DefaultViewer(
         document.getElementById("viewerCanvas")
@@ -73,7 +74,7 @@ function BookDetailPage() {
             <img
               src={image_link}
               alt=""
-              width={"100%"}
+              // width={"100%"}
               height={300}
               style={{ objectFit: "contain" }}
             />
