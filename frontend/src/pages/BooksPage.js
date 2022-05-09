@@ -5,7 +5,7 @@ import SearchField from "../components/searchField";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import LoadingSkeleton from "../components/Skeleton";
+import DetailsPageSkeleton from "../components/DetailsPageSkeleton";
 
 const filterOptions = [
   {
@@ -78,7 +78,7 @@ function BooksPage() {
           </LocalizationProvider>
         </Box>
       </Box>
-      <Suspense fallback={<LoadingSkeleton />}>
+      <Suspense fallback={<DetailsPageSkeleton />}>
         <Outlet />
       </Suspense>
     </Container>
