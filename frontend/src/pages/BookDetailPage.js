@@ -43,6 +43,7 @@ function BookDetailPage() {
   useEffect(() => {
     // window.google.books.load();
     function initialize() {
+      // console.log("initializing...");
       const viewer = new window.google.books.DefaultViewer(
         document.getElementById("viewerCanvas")
       );
@@ -67,14 +68,14 @@ function BookDetailPage() {
   } = book || {};
 
   return (
-    <Container sx={{ bgcolor: "#faf9f8", my: 2 }} disableGutters={true}>
+    <Container sx={{ bgcolor: "#faf9f8", my: 2 }} disableGutters>
       <Box>
         <Grid container columnSpacing={3} rowSpacing={3}>
           <Grid item xs={12} sm={5} md={4} lg={3} xl={2}>
             <img
               src={image_link}
               alt=""
-              // width={"100%"}
+              width={"100%"}
               height={300}
               style={{ objectFit: "contain" }}
             />
