@@ -68,7 +68,7 @@ function BookDetailPage() {
   } = book || {};
 
   return (
-    <Container sx={{ bgcolor: "#faf9f8", my: 2 }} disableGutters>
+    <Container sx={{ bgcolor: "#faf9f8", my: 2 }}>
       <Box>
         <Grid container columnSpacing={3} rowSpacing={3}>
           <Grid item xs={12} sm={5} md={4} lg={3} xl={2}>
