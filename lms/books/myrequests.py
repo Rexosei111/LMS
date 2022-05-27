@@ -1,25 +1,30 @@
 from datetime import datetime
 import requests
-import os
 from dotenv import load_dotenv
 
 load_dotenv
 
-key = os.getenv("GOOGLE_BOOKS_KEY")
+key = "AIzaSyCsS71-7knB_kSOOMuIppGS5cw5ISUKsvo"
 url = "https://www.googleapis.com/books/v1/volumes"
 
 def get_book_data(isbn: str):
     try:
         response = requests.get(url, {"q": f"isbn:{isbn}","key": key})
-        data = response.json()["items"][0]
-        volumeInfo = data["volumeInfo"]
-        accessInfo = data["accessInfo"]
-        return volumeInfo, accessInfo                                                             
+        data = response.json()
+        items = data.get("items", None)
+        if(items is None):
+            return (None, None)
+
+        volumeInfo = items[0].get("volumeInfo", None)
+        accessInfo = items[0].get("accessInfo", None)
+        return (volumeInfo, accessInfo)
     except ConnectionError:
-        print(f"Unable to retrieve data")
-        return None
-    
+        print("Unable to retrieve data")
+        return (None, None)
+
 def get_date(date_string: str):
+    if(date_string is None):
+        return None
     try:
         date = datetime.strptime(date_string, "%Y-%m-%d").date()
         return date

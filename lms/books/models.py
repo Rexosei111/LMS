@@ -1,16 +1,11 @@
-import ast
-from datetime import datetime
 from django.db import models
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from pytz import timezone
 from .myrequests import get_book_data, get_date
 from students.models import Student
+from typing import Iterable
 
 # Create your models here.
-
-from django.db import models
-from typing import Iterable
 
 class ListField(models.TextField):
     """
@@ -70,12 +65,12 @@ class Book(models.Model):
     fetch_data = models.BooleanField(default=True)
     isbn = models.CharField(
         max_length=20,
+        unique=True,
         help_text="13 Character ISBN number (https://www.isbn-international.org/content/what-isbn)",
     )
     author = models.CharField(max_length=100, null=True, blank=True)
     title = models.CharField(max_length=200)
-    summary = models.CharField(
-        max_length=500, help_text="Enter brief description of the book"
+    summary = models.TextField(help_text="Enter brief description of the book"
     )
     language = models.ForeignKey(
         Language, on_delete=models.SET_NULL, null=True, blank=True
@@ -100,28 +95,30 @@ class Book(models.Model):
     )
 
     def clean(self) -> None:
-        print(type(self.category))
         number = "".join(self.isbn.split("-"))
         if(self.fetch_data):
             if len(number) in [10, 13]:
                 volumeInfo, accessInfo = get_book_data(self.isbn)
-                pub_date = get_date(volumeInfo["publishedDate"])
-                if(volumeInfo):
+
+                if(volumeInfo is None):
+                    raise ValidationError("Unable to retrieve book data")
+                else:
+                    pub_date = get_date(volumeInfo.get("publishedDate", None))
                     author = volumeInfo.get("authors", None)
                     self.author = author[0] if author else None
-                    self.title = volumeInfo["title"] or self.title
-                    self.publisher = volumeInfo["publisher"] or None
+                    self.title = volumeInfo.get("title", self.title)
+                    self.publisher = volumeInfo.get("publisher", self.publisher)
                     self.published_date =  pub_date
-                    self.page_count = volumeInfo.get("pageCount", None)
-                    self.summary = volumeInfo["description"] or None
+                    self.page_count = volumeInfo.get("pageCount", self.page_count)
+                    self.summary = volumeInfo.get("description", self.summary)
                     self.image_link = volumeInfo["imageLinks"]["thumbnail"] or None
                     self.embeddable = accessInfo.get("embeddable", None)
                     self.average_rating = volumeInfo.get("averageRating", 0.0)
-                    self.category = volumeInfo.get("categories", None)
+                    self.category = volumeInfo.get("categories", self.category)
                     self.image_small_thumbnail = volumeInfo["imageLinks"]["smallThumbnail"] or None
-                    
-                else:
-                    raise ValidationError("Unable to retrieve book data")
+
+
+
             else:
                 raise ValidationError(
                 {
@@ -158,11 +155,11 @@ RATING = (
     (5, "5")
 )
 class BookReview(models.Model):
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField(null=True, help_text="Rate this book on the scale of 1 - 5", choices=RATING)
     review = models.TextField(null=True)
     reviewed_at = models.DateField(auto_now=True)
-    
+
     def __str__(self):
         return self.email
