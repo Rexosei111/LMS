@@ -18,6 +18,7 @@ import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
+import { API } from "../lib/Axios_init";
 
 const initialValues = {
   first_name: "",
@@ -68,23 +69,22 @@ function RegisterForm() {
     initialValues,
     onSubmit: async (values) => {
       setLoading(true);
-      axios
-        .post("https://kyei.pythonanywhere.com/api/students/register", values)
-        .then((res) => {
-          setLoading(false);
-          setSuccess(true);
-          setError(false);
-        })
-        .catch((err) => {
+      try {
+        await API.post("/students/register", values);
+        setLoading(false);
+        setSuccess(true);
+        setError(false);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
           setErrorMessage((prevState) => ({
             ...prevState,
-            ...err.response.data,
+            ...error.response.data,
           }));
-          setLoading(false);
-          setSuccess(false);
-          setError(true);
-        });
-      setLoading(false);
+        }
+        setLoading(false);
+        setSuccess(false);
+        setError(true);
+      }
     },
     validate,
   });
@@ -454,9 +454,9 @@ function RegisterForm() {
             <LoadingButton
               variant="contained"
               type="submit"
-              loadingPosition="center"
-              loading={loading}
               endIcon={<SaveIcon />}
+              loadingPosition="end"
+              loading={loading}
               sx={{
                 bgcolor: error ? "#fd251a" : success ? "#55ab6f" : "#2f2e41",
                 "&:hover": {
@@ -468,6 +468,7 @@ function RegisterForm() {
                 },
               }}
               disabled={Object.entries(formik.errors).length > 0 ? true : false}
+              fullWidth
             >
               Submit
             </LoadingButton>

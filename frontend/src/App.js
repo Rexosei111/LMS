@@ -10,9 +10,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const BookDetailPage = lazy(() => import("./pages/BookDetailPage"));
 
 function App() {
-  useEffect(() => {
-    window.google.books.load();
-  }, []);
+  
   return (
     <Suspense fallback="Loading ...">
       <Routes>

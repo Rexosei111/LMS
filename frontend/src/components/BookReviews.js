@@ -8,6 +8,7 @@ import {
   Container,
   Fab,
   Rating,
+  Skeleton,
   Stack,
   styled,
   Typography,
@@ -19,6 +20,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { API } from "../lib/Axios_init";
+import { Box } from "@mui/system";
 
 export const ReviewCard = ({ review }) => {
   const xxs = useMediaQuery("(max-width:299px)");
@@ -60,19 +63,25 @@ export const CustomFab = styled(Fab)(({ theme }) => ({
 function BookReviews() {
   const params = useParams();
   const [Reviews, setReviews] = useState(null);
+  const [Loading, setLoading] = useState(false);
   const reviewContainer = useRef();
-  const fabLeft = useRef();
-  const fabRight = useRef();
+  const lg = useMediaQuery("(max-width: 1000px)");
 
   useEffect(() => {
-    axios({
-      url: `https://kyei.pythonanywhere.com/api/books/${params.bookId}/reviews`,
-      method: "GET",
-    })
-      .then((response) => {
-        setReviews(response.data.results);
-      })
-      .catch((error) => console.log(error));
+    async function fetchData() {
+      setLoading(true);
+      try {
+        const { data } = await API.get(`books/${params.bookId}/reviews`);
+        setReviews(data.results);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        if (axios.isAxiosError(error) && error.response) {
+          console.log(error);
+        }
+      }
+    }
+    fetchData();
   }, [params.bookId]);
 
   const scrollLeft = () => {
@@ -83,44 +92,45 @@ function BookReviews() {
     reviewContainer.current.scrollLeft += 250;
   };
 
-  const showScroll = () => {
-    fabLeft.current.style.visibility = "visible";
-    fabRight.current.style.visibility = "visible";
-  };
-  const hideScroll = () => {
-    fabLeft.current.style.visibility = "hidden";
-    fabRight.current.style.visibility = "hidden";
-  };
+  const xxs = useMediaQuery("(max-width:299px)");
+
   return (
     <Container sx={{ mt: 2, position: "relative" }} disableGutters>
       <Typography variant="h5" my={2}>
         Reviews From Students
       </Typography>
-      {Reviews?.length !== 0 ? (
+      {Loading ? (
+        <Stack direction="row" overflow="hidden" spacing={2}>
+          {[...Array(5).keys()].map((index) => (
+            <Box
+              sx={{ width: xxs ? "100%" : 250, height: 250, flexShrink: 0 }}
+              key={index}
+            >
+              <Skeleton variant="rectangular" width={"100%"} height={"60%"} />
+              <Skeleton variant="text" width={"80%"} />
+            </Box>
+          ))}
+        </Stack>
+      ) : Reviews?.length !== 0 ? (
         <>
           <CustomFab
             size="medium"
             onClick={scrollLeft}
-            ref={fabLeft}
-            onMouseEnter={showScroll}
-            onMouseLeave={hideScroll}
             sx={{
               position: "absolute",
               top: "50%",
-              left: 0,
+              left: 3,
               zIndex: 2,
-              visibility: "hidden",
+              visibility: lg ? "hidden" : "visible",
             }}
           >
             <ArrowBackIosIcon fontSize="medium" />
           </CustomFab>
           <Stack
             direction="row"
-            overflow="hidden"
+            overflow={lg ? "auto" : "hidden"}
             spacing={2}
             ref={reviewContainer}
-            onMouseEnter={showScroll}
-            onMouseLeave={hideScroll}
           >
             {Reviews?.map((review) => (
               <ReviewCard review={review} key={review.id} />
@@ -129,15 +139,12 @@ function BookReviews() {
           <CustomFab
             size="medium"
             onClick={scrollRight}
-            ref={fabRight}
-            onMouseEnter={showScroll}
-            onMouseLeave={hideScroll}
             sx={{
               position: "absolute",
               top: "50%",
-              right: 0,
+              right: 3,
               zIndex: 2,
-              visibility: "hidden",
+              visibility: lg ? "hidden" : "visible",
             }}
           >
             <ArrowForwardIosIcon fontSize="medium" />

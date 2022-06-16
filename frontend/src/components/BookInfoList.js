@@ -28,16 +28,21 @@ const icons = {
 export default function BookInfoList({ info }) {
   return (
     <Grid container rowSpacing={3} columnSpacing={2} sx={{ width: "100%" }}>
-      {Object.entries(info).map((entry, index) => (
-        <Grid item xs="auto" key={index}>
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar>{icons[entry[0]] || <ImageIcon />}</Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={formatText(entry[0])} secondary={entry[1]} />
-          </ListItem>
-        </Grid>
-      ))}
+      {Object.entries(info).map((entry, index) => {
+        return (
+          <Grid item xs="auto" key={index}>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar>{icons[entry[0]] || <ImageIcon />}</Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={formatText(entry[0])}
+                secondary={entry[1]}
+              />
+            </ListItem>
+          </Grid>
+        );
+      })}
     </Grid>
   );
 }

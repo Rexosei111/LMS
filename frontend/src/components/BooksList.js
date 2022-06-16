@@ -1,14 +1,16 @@
 import { Container, Grid, Typography } from "@mui/material";
-import React, { Suspense, useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useMemo, useState } from "react";
 import BookCard from "./BookCard";
 import Paginator from "./Paginator";
 import { Box } from "@mui/system";
 import { useLocation } from "react-router-dom";
+import { API } from "../lib/Axios_init";
+import BooksListSkeleton from "./BooksListSkeleton";
 
 function BooksList() {
   const location = useLocation();
   const [Books, setBooks] = useState([]);
+  const [Loading, setLoading] = useState(false);
   const [next, setNext] = useState(null);
   const [count, setCount] = useState(0);
   const [previous, setPrevious] = useState(null);
@@ -16,13 +18,20 @@ function BooksList() {
 
   useEffect(() => {
     async function getBooks() {
-      const { data } = await axios.get(
-        `https://kyei.pythonanywhere.com/api/books?${query}`
-      );
-      setBooks(data.results);
-      setNext(data.next);
-      setCount(data.count);
-      setPrevious(data.previous);
+      setLoading(true);
+      try {
+        const { data } = await API.get(`books?${query}`);
+        setBooks(data.results);
+        setNext(data.next);
+        setCount(data.count);
+        setPrevious(data.previous);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        if (API.isAxiosError(error) && error.response) {
+          console.log(error);
+        }
+      }
     }
     getBooks();
   }, [query]);
@@ -34,7 +43,9 @@ function BooksList() {
           : `Results for '${query.get("search")}'`}
       </Typography>
       <Container maxWidth="xl" sx={{ bgcolor: "#faf9f8", py: 2 }}>
-        {Books.length === 0 ? (
+        {Loading ? (
+          <BooksListSkeleton />
+        ) : Books.length === 0 ? (
           <Typography
             variant="h4"
             component="div"
@@ -56,6 +67,7 @@ function BooksList() {
             ))}
           </Grid>
         )}
+
         <Box
           my={2}
           sx={{ width: "100%", display: "flex", justifyContent: "center" }}

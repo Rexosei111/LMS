@@ -1,10 +1,12 @@
 from datetime import datetime
+from django.shortcuts import render
 from rest_framework import generics, filters
 from .serializer import AddReviewSerializer, BookDetailSerializer, BookSerializer, Book, ReviewSerializer, BookReview
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.permissions import AllowAny
+from django.views.decorators.clickjacking import xframe_options_sameorigin, xframe_options_exempt
 class BookList(generics.ListAPIView):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
@@ -60,7 +62,12 @@ def AddBookReview(request, book_pk):
     print(data)
     serialzer = AddReviewSerializer(data={**data, "book": book_pk})
     if serialzer.is_valid():
-        review = serialzer.save()
         return Response(status=200)
     else:
         return Response(serialzer.errors, 400)
+    
+@xframe_options_exempt
+def get_book_preview(request, isbn: str):
+    striped_number = "".join(isbn.split("-"))
+    print(striped_number)
+    return render(request, "book_preview.html", {"isbn": striped_number})

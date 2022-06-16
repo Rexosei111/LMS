@@ -3,6 +3,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export const truncateBookTitle = (text) => {
   if (text && text.length > 250) {
@@ -13,8 +14,10 @@ export const truncateBookTitle = (text) => {
 };
 
 function BookCard({ book, wrap = true }) {
+  const navigator = useNavigate();
   const viewBook = (event, id) => {
-    window.location.href = `/books/${id}`;
+    // window.location.href = `/books/${id}`;
+    navigator(`/books/${id}`);
   };
 
   return (
