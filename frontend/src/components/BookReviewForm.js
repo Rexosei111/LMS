@@ -15,7 +15,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { useParams } from "react-router-dom";
-import { API } from "../lib/Axios_init";
+import { API } from "../utils/Axios_init";
 
 const initialValues = {
   email: "",

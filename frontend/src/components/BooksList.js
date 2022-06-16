@@ -4,7 +4,7 @@ import BookCard from "./BookCard";
 import Paginator from "./Paginator";
 import { Box } from "@mui/system";
 import { useLocation } from "react-router-dom";
-import { API } from "../lib/Axios_init";
+import { API } from "../utils/Axios_init";
 import BooksListSkeleton from "./BooksListSkeleton";
 
 function BooksList() {

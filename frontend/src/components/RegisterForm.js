@@ -18,7 +18,7 @@ import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
 import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
-import { API } from "../lib/Axios_init";
+import { API } from "../utils/Axios_init";
 
 const initialValues = {
   first_name: "",

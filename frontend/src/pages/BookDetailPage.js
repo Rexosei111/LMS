@@ -15,7 +15,7 @@ import Rating from "@mui/material/Rating";
 import Tooltip from "@mui/material/Tooltip";
 import BookReviewForm from "../components/BookReviewForm";
 import BookReviews from "../components/BookReviews";
-import { API } from "../lib/Axios_init";
+import { API } from "../utils/Axios_init";
 
 function BookDetailPage() {
   const params = useParams();

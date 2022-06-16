@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import BookCard from "./BookCard";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { API } from "../lib/Axios_init";
+import { API } from "../utils/Axios_init";
 import BooksCardSkeleton from "./BooksCardSkeleton";
 
 export const CustomFab = styled(Fab)(({ theme }) => ({

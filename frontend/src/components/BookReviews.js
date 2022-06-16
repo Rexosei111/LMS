@@ -20,7 +20,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { API } from "../lib/Axios_init";
+import { API } from "../utils/Axios_init";
 import { Box } from "@mui/system";
 
 export const ReviewCard = ({ review }) => {
