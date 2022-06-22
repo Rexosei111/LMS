@@ -64,13 +64,13 @@ class Language(models.Model):
 class Book(models.Model):
     fetch_data = models.BooleanField(default=True)
     isbn = models.CharField(
-        max_length=20,
+        max_length=17,
         unique=True,
         help_text="13 Character ISBN number (https://www.isbn-international.org/content/what-isbn)",
     )
     author = models.CharField(max_length=100, null=True, blank=True)
     title = models.CharField(max_length=200)
-    summary = models.TextField(help_text="Enter brief description of the book"
+    summary = models.TextField(help_text="Enter brief description of the book", null=True, blank=True
     )
     language = models.ForeignKey(
         Language, on_delete=models.SET_NULL, null=True, blank=True
@@ -95,13 +95,15 @@ class Book(models.Model):
     )
 
     def clean(self) -> None:
-        number = "".join(self.isbn.split("-"))
+        # number = "".join(self.isbn.split("-"))
+        if (self.isbn): number =  "".join(self.isbn.split("-"))
+        else: number =  None
         if(self.fetch_data):
-            if len(number) in [10, 13]:
+            if (number and len(number) in [10, 13]):
                 volumeInfo, accessInfo = get_book_data(self.isbn)
 
                 if(volumeInfo is None):
-                    raise ValidationError("Unable to retrieve book data")
+                    raise ValidationError("Unable to retrieve book data. This may be due to non-existence of a book with this ISBN")
                 else:
                     pub_date = get_date(volumeInfo.get("publishedDate", None))
                     author = volumeInfo.get("authors", None)
@@ -163,3 +165,24 @@ class BookReview(models.Model):
 
     def __str__(self):
         return self.email
+    
+class RecommendedBook(models.Model):
+    title = models.CharField(max_length=100, blank=False, null=False, help_text="Title of the book")
+    author = models.CharField(max_length=200, null=True, blank=True, help_text="Author of this book")
+    isbn = models.CharField(max_length=17, blank=True, null=True)
+    recommended_by = models.EmailField(null=False, blank=False)
+    phone_number = models.CharField(max_length=12, blank=True, null=True)
+    recommended_at = models.DateField(auto_now_add=True)
+    
+    def clean(self) -> None:
+        if (self.isbn): number =  "".join(self.isbn.split("-"))
+        else: number =  None
+        if(number and (len(number) != 10 or len(number) != 13)):
+            raise ValidationError({
+                "isbn": "Invalid ISBN number"
+            })
+        
+        return super().clean()
+    
+    def __str__(self):
+        return self.title

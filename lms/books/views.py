@@ -1,12 +1,12 @@
 from datetime import datetime
 from django.shortcuts import render
 from rest_framework import generics, filters
-from .serializer import AddReviewSerializer, BookDetailSerializer, BookSerializer, Book, ReviewSerializer, BookReview
+from .serializer import AddReviewSerializer, BookDetailSerializer, BookSerializer, Book, RecommendBookSerializer, ReviewSerializer, BookReview
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.permissions import AllowAny
-from django.views.decorators.clickjacking import xframe_options_sameorigin, xframe_options_exempt
+from django.views.decorators.clickjacking import xframe_options_exempt
 class BookList(generics.ListAPIView):
     serializer_class = BookSerializer
     filter_backends = [filters.SearchFilter]
@@ -65,6 +65,19 @@ def AddBookReview(request, book_pk):
         return Response(status=200)
     else:
         return Response(serialzer.errors, 400)
+    
+@api_view(["POST"])
+@permission_classes([AllowAny])
+@parser_classes([JSONParser])
+def RecommendBook(request):
+    data = {**request.data, "recommended_by": request.data["email"]}
+    print(data)
+    serializer = RecommendBookSerializer(data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=200)
+    else:
+        return Response(serializer.errors, 400)
     
 @xframe_options_exempt
 def get_book_preview(request, isbn: str):

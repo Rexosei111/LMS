@@ -1,8 +1,9 @@
+from typing import List, Sequence
 from lms.admin import admin_site
 from django.contrib import admin
 
 from .forms import BookForm, BorrowedBooks, BorrowedBooksForm
-from .models import Book, BorrowedBooks, Language, BookReview
+from .models import Book, BorrowedBooks, Language, BookReview, RecommendedBook
 
 # Register your models here.
 
@@ -17,7 +18,7 @@ class BookAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {"fields": ["fetch_data", "title", "author", "isbn", "available_copies"]}),
-        ("Other", {"fields": [("publisher", "published_date"), "image_link", ("shelf_number", "page_count"),"language", "embeddable", "average_rating", "category"]}),
+        ("Other", {"fields": [("publisher", "published_date"), "summary", "image_link", ("shelf_number", "page_count"),"language", "embeddable", "average_rating", "category"]}),
     )
 
     def save_model(self, request, obj, form, change):
@@ -51,9 +52,15 @@ class CustomReviewAdmin(admin.ModelAdmin):
 
 class CustomLanguageAdmin(admin.ModelAdmin):
     search_fields = ["name"]
+    
+class CustomRecommendBookAdmin(admin.ModelAdmin):
+    list_display = ["title", "author"]
+    search_fields: List[str] = ["title", "author", "recommended_by"] 
+
 
 
 admin_site.register(Book, BookAdmin)
 admin_site.register(Language, CustomLanguageAdmin)
 admin_site.register(BookReview, CustomReviewAdmin)
 admin_site.register(BorrowedBooks, CustomBorrowedBooksAdmin)
+admin_site.register(RecommendedBook, CustomRecommendBookAdmin)

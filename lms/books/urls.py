@@ -8,7 +8,8 @@ urlpatterns = [
     path("<int:pk>", views.GetBook.as_view()),
     path("<int:book_pk>/reviews", views.GetReviews.as_view()),
     path("<int:book_pk>/reviews/new", views.AddBookReview),
-    path("preview/<str:isbn>", views.get_book_preview, name="preview")
+    path("preview/<str:isbn>", views.get_book_preview, name="preview"),
+    path("recommend", views.RecommendBook, name="recommendation")
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
