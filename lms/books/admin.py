@@ -1,4 +1,3 @@
-from typing import List, Sequence
 from lms.admin import admin_site
 from django.contrib import admin
 
@@ -55,7 +54,7 @@ class CustomLanguageAdmin(admin.ModelAdmin):
     
 class CustomRecommendBookAdmin(admin.ModelAdmin):
     list_display = ["title", "author"]
-    search_fields: List[str] = ["title", "author", "recommended_by"] 
+    search_fields = ["title", "author", "recommended_by"] 
 
 
 

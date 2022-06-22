@@ -1,8 +1,5 @@
 from django.contrib.auth.base_user import BaseUserManager
 
-# from .utils import normalize_index_number
-
-
 class UserManager(BaseUserManager):
     pass
 

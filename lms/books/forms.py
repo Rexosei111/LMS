@@ -6,8 +6,6 @@ class BorrowedBooksForm(forms.ModelForm):
     class Meta:
         model = BorrowedBooks
         fields = "__all__"
-        # exclude = ["issued_by"]
-
 
 class BookForm(forms.ModelForm):
     class Meta:
