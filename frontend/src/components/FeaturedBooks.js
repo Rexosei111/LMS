@@ -21,7 +21,7 @@ export const CustomFab = styled(Fab)(({ theme }) => ({
   },
 }));
 function FeaturedBooks() {
-  const [Books, setBooks] = useState([]);
+  const [Books, setBooks] = useState(null);
   const [Loading, setLoading] = useState(false);
   const recent = useRef();
   useEffect(() => {
@@ -77,6 +77,14 @@ function FeaturedBooks() {
             <BooksCardSkeleton wrap={false} key={index} />
           ))}
         </Stack>
+      ) : Books === null ? (
+        <Typography variant="h5" textAlign={"center"} my={2}>
+          Unable to retrieve Books at this time
+        </Typography>
+      ) : Books.length === 0 ? (
+        <Typography variant="h5" textAlign={"center"} my={2}>
+          No Recent Books
+        </Typography>
       ) : (
         <>
           <CustomFab
