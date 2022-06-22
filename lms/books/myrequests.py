@@ -20,7 +20,6 @@ def get_book_data(isbn: str):
         accessInfo = items[0].get("accessInfo", None)
         return (volumeInfo, accessInfo)
     except ConnectionError:
-        print("Unable to retrieve data")
         return (None, None)
 
 def get_date(date_string: str):

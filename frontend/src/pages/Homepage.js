@@ -1,4 +1,5 @@
 import React, { Suspense, useEffect } from "react";
+import BookRecommendation from "../components/BookRecommendation";
 import FeaturedBooks from "../components/FeaturedBooks";
 import HeroSection from "../components/HeroSection";
 import LibraryTime from "../components/LibraryTime";
@@ -18,6 +19,7 @@ function Homepage() {
       </Suspense>
       <LibraryTime />
       <RegisterForm />
+      <BookRecommendation />
     </>
   );
 }

@@ -1,4 +1,4 @@
-from .models import Book, BookReview
+from .models import Book, BookReview, RecommendedBook
 from rest_framework import serializers
 
 class BookSerializer(serializers.ModelSerializer):
@@ -21,3 +21,8 @@ class AddReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookReview
         exclude = ["reviewed_at"]
+        
+class RecommendBookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecommendedBook
+        exclude = ["recommended_at"]
